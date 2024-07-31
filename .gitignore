@@ -1,5 +1,6 @@
 brain-tumor-mri-dataset/
 Data/
 .ipynb_checkpoints/
+.vscode/
 brain-tumor-mri-dataset.zip
 brain-tumors-dataset.zip
