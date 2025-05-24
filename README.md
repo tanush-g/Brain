@@ -54,7 +54,7 @@ The data link and complete description here [`Brain Tumor Data on Kaggle`](https
 
 The dataset consists of 7,023 MRI images categorized as Glioma, Meningioma, No Tumor, and Pituitary. The images are sourced from figshare and Br35H Datasets.
 
-![Dataset Split](datasplit.png "Dataset Split")
+![Dataset Split](resources/datasplit.png "Dataset Split")
 
 ### Data Preprocessing
 
@@ -64,7 +64,7 @@ The dataset consists of 7,023 MRI images categorized as Glioma, Meningioma, No T
 - **Train/Test Splitting**: The dataset is split into training and testing sets.
 - **Data Augmentation**: Techniques include random horizontal flipping, rotation, contrast adjustment, zoom, and slight translations.
 
-![Augmented and Pre-Processed Images](augmentedtumors.png "Augmented and Pre-Processed Images")
+![Augmented and Pre-Processed Images](resources/augmentedtumors.png "Augmented and Pre-Processed Images")
 
 ### Model Design
 
@@ -75,9 +75,9 @@ The CNN model architecture includes:
 - A flattening layer to convert 2D feature maps to a 1D vector.
 - Two dense layers with SoftMax activation for multi-class classification.
 
-![Model Architecture Summary](model_architecture.png "Model Architecture Summary")
+![Model Architecture Summary](resources/model_architecture.png "Model Architecture Summary")
 
-![Model Layers](model.png "Model Layers")
+![Model Layers](resources/model.png "Model Layers")
 
 ### Model Training
 
@@ -86,7 +86,7 @@ The CNN model architecture includes:
 - **Training Callbacks**: ReduceLROnPlateau and ModelCheckpoint.
 - **Hyperparameter Tuning**: Batch size of 32 and 50 epochs. Early stopping and learning rate scheduling are used to prevent overfitting.
 
-![Training Curves](trainingepochs.png "Training Curves")
+![Training Curves](resources/trainingepochs.png "Training Curves")
 
 ### Model Evaluation
 
@@ -116,7 +116,7 @@ Overall Accuracy: 0.9916
 
 **Confusion Matrix**: Visualizing model performance across all classes.
 
-![Confusion Matrix](confusionmatrix.png "Confusion Matrix")
+![Confusion Matrix](resources/confusionmatrix.png "Confusion Matrix")
 
 ### Deployment
 
@@ -126,7 +126,7 @@ The trained model is saved in Keras format and integrated into a user-friendly i
 
 The results indicate that the CNN model performs well in classifying brain tumors from MRI images, achieving high accuracy (99+%) and reliability. The implementation demonstrates the potential of deep learning in enhancing diagnostic accuracy and efficiency in neuro-oncology.
 
-![Testing Samples](testing.png "Testing Samples")
+![Testing Samples](resources/testing.png "Testing Samples")
 
 ## Conclusion and Future Work
 
