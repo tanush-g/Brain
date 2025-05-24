@@ -30,7 +30,7 @@ def main():
     pred_class, probs = predict(model, img_array, CLASS_MAPPINGS)
 
     # Display results
-    st.image(img_bytes, caption="Uploaded MRI") # use_column_width=True
+    st.image(img_bytes, caption="Uploaded MRI", use_container_width=True)
     st.markdown(f"**Prediction:** {pred_class}")
     st.markdown("**Probabilities:**")
     for class_name, idx in CLASS_MAPPINGS.items():
