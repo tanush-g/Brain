@@ -1,0 +1,9 @@
+streamlit
+keras
+tensorflow
+numpy
+Pillow
+scikit-learn
+matplotlib
+seaborn
+visualkeras

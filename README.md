@@ -1,8 +1,15 @@
 # Deep Learning based Brain Tumour Classification using CNNs and MR Imaging
 
-## CNN Model using Tensorflow
+This project aims to classify brain MRI images into four categories: Glioma, Meningioma, No tumor, and Pituitary tumor. It utilizes Keras (with TensorFlow backend) to build and train a convolutional neural network (CNN). An interactive web application built with Streamlit allows users to upload MRI images and receive instant classification results.
 
-This project aims to classify brain MRI images into four categories: Glioma, Meningioma, No tumor, and Pituitary tumor. It utilizes TensorFlow to build and train a convolutional neural network (CNN) for the task.
+## Features
+
+- **CNN Model**: A Keras-based Convolutional Neural Network trained for classifying brain tumors.
+- **Interactive Web App**: A Streamlit application (`app.py`) for easy interaction with the model. Users can upload MRI images and view predictions.
+- **Data Preprocessing**: Includes scripts and functions for preparing MRI image data for training and prediction.
+- **Model Evaluation**: Jupyter notebook (`tumorClassification.py`) detailing the model training, evaluation, and visualization of results (e.g., confusion matrix, accuracy/loss plots).
+- **Dev Environment**: Pre-configured development environment using Dev Containers for consistent setup.
+- **Code Quality**: Includes a GitHub Actions workflow for CodeQL to analyze code for security vulnerabilities.
 
 ## Understanding Brain Tumors and Detection Methods
 
@@ -10,28 +17,11 @@ A brain tumor represents an abnormal mass or growth of cells in the brain, exist
 
 Deep learning, particularly in the realm of healthcare, has brought significant improvements in diagnosing various conditions, including brain tumors. The World Health Organization emphasizes the importance of accurate brain tumor diagnosis, which includes detecting the presence of a tumor, pinpointing its location, and classifying its type and grade. This notebook explores the use of Convolutional Neural Networks (CNNs) in a multi-task approach for the detection, classification, and location identification of brain tumors using MRI images, showcasing the potential of these models to revolutionize diagnostics in neurology.
 
-## About the Dataset
-
-This dataset is a compilation of two primary datasets: figshare and Br35H. The dataset comprises a total of `7023` human **brain MRI images**, categorized into four distinct classes. The dataset focuses on brain tumors and their classification. The four classes are as follows:
-
-- **Glioma**: Cancerous brain tumors in glial cells.
-- **Meningioma**: Non-cancerous tumors originating from the meninges.
-- **No Tumor**: Normal brain scans without detectable tumors.
-- **Pituitary**: Tumors affecting the pituitary gland, which can be cancerous or non-cancerous.
-
-Advancing the development of machine learning models for tumor classification is crucial for driving progress in the field of neurology and making a significant impact on the lives of individuals. These models have the potential to enhance medical research, improve diagnostic accuracy, and contribute to effective treatment strategies for various types of tumors. By leveraging machine learning techniques, we can significantly aid in the advancement of neurology and ultimately improve healthcare outcomes for people affected by tumors.
-
-The "No Tumor" class images were obtained from the `Br35H dataset`.
-
-The data link and complete description here [`Brain Tumor Data on Kaggle`](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)
-
-## Introduction
-
-This project leverages a TensorFlow-based deep learning Convolutional Neural Network (CNN) model to classify brain tumors from MRI images into four categories: Glioma, Meningioma, Pituitary, and No Tumor. The integration of artificial intelligence (AI) and machine learning (ML) in medical imaging aims to enhance diagnostic accuracy and efficiency, reducing reliance on manual interpretation by radiologists.
-
 ## Motivation
 
-Brain tumors are a significant medical concern with severe implications for patients. Misdiagnosis can lead to delayed treatment, inappropriate interventions, and reduced survival rates. This project aims to improve diagnostic tools in neuro-oncology by using AI to address current limitations in brain tumor detection and classification.
+Brain tumors pose a major medical challenge with life-altering consequences. Misdiagnosis may delay treatment and lead to unsuitable interventions, potentially diminishing survival rates. This project seeks to enhance neuro-oncology diagnostic tools by leveraging AI to address existing shortcomings in brain tumor detection and classification.
+
+Improving machine learning models for tumor classification is pivotal in advancing neurology research and patient care. These models can boost diagnostic accuracy, inform more effective treatment strategies, and deepen our understanding of tumor behavior. Ultimately, by integrating robust machine learning techniques, we aim to drive progress in medical research and deliver better healthcare outcomes for individuals affected by brain tumors.
 
 ## Scope of Work
 
@@ -44,6 +34,19 @@ This project encompasses the end-to-end development of a CNN-based model for bra
 5. **Model Evaluation**: Splitting the dataset into training and testing sets, evaluating model performance using accuracy, precision, recall, F1-score, and confusion matrix.
 6. **Deployment**: Creating a user-friendly interface for uploading MRI images and receiving classification results.
 7. **Documentation**: Documenting the development process, including data processing, model building, and evaluation.
+
+## About the Dataset
+
+This dataset is a compilation of two primary datasets: figshare and Br35H. The dataset comprises a total of `7023` human **brain MRI images**, categorized into four distinct classes. The dataset focuses on brain tumors and their classification. The four classes are as follows:
+
+- **Glioma**: Cancerous brain tumors in glial cells.
+- **Meningioma**: Non-cancerous tumors originating from the meninges.
+- **No Tumor**: Normal brain scans without detectable tumors.
+- **Pituitary**: Tumors affecting the pituitary gland, which can be cancerous or non-cancerous.
+
+The "No Tumor" class images were obtained from the `Br35H dataset`.
+
+The data link and complete description here [`Brain Tumor Data on Kaggle`](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)
 
 ## Methodology
 
@@ -131,23 +134,103 @@ This project showcases the application of CNNs in medical imaging, providing a v
 
 ## Project Structure
 
-The project is organized as follows:
+```plaintext
+├── .devcontainer/
+│   └── devcontainer.json  # Configuration for VS Code Dev Containers
+├── .github/
+│   └── workflows/
+│       └── codeql.yml     # GitHub Actions workflow for CodeQL
+├── brain-tumor-mri-dataset/ # Dataset (not committed, download separately)
+│   ├── Testing/
+│   └── Training/
+├── Data/                    # Sample data for testing (not committed)
+├── __pycache__/
+├── app.py                   # Main Streamlit application file
+├── model_utils.py           # Utility functions for model loading and preprocessing
+├── tumorClassification.py   # Python script version of the Jupyter Notebook for model training and evaluation
+├── model.keras              # Trained Keras model file
+├── requirements.txt         # Python dependencies
+├── README.md                # This file
+└── ... (other images, notebooks, etc.)
+```
 
-- `brain-tumor-classification.ipynb`: Jupyter notebook containing the main analysis and model training.
-- `cleanedscript.py`: Python script derived from the Jupyter notebook for streamlined execution.
-- `brain-tumor-mri-dataset/`: Directory containing the MRI dataset split into Training and Testing sets.
-- `Data/`: Directory containing additional data for the project.
-- `model.keras`: Trained model saved in Keras format.
-- `README.md`: This file, providing an overview and instructions for the project.
+## Getting Started
 
-## Setup
+### Prerequisites
 
-To run this project, you will need Python 3.8 or later and the following packages:
+- Python 3.9+
+- pip (Python package installer)
+- Git
 
-- TensorFlow 2.16 or later
-- Matplotlib
-- NumPy
+### Installation and Setup
 
-You can install the necessary packages using pip:
+1. **Clone the repository:**
 
-`pip install tensorflow matplotlib numpy`
+    ```bash
+    # if using HTTPS
+    git clone https://github.com/tanush-g/Brain.git
+    # if using SSH
+    git clone git@github.com:tanush-g/Brain.git
+    # if using GitHub CLI
+    gh repo clone tanush-g/Brain
+
+    cd Brain
+    ```
+
+2. **Create and activate a virtual environment (recommended):**
+
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    ```
+
+3. **Install dependencies:**
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4. **Download the dataset:**
+    The dataset is available on Kaggle: [Brain Tumor MRI Dataset](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset). Download it and place the `Training` and `Testing` folders into the `brain-tumor-mri-dataset` directory at the root of the project.
+
+5. **Train the model (Optional):**
+    If you want to retrain the model or explore the training process, run the `tumorClassification.py` script or the original Jupyter notebook. This will generate the `model.keras` file.
+
+    ```bash
+    python tumorClassification.py
+    ```
+
+    *Note: Ensure you have the dataset downloaded and paths are correctly set in the script if you choose to retrain.*
+
+### Running the Streamlit Application
+
+Once the `model.keras` file is present (either by training or by using a pre-trained one provided with the project), you can run the Streamlit application:
+
+```bash
+streamlit run app.py
+```
+
+This will start a local web server, and you can interact with the application by navigating to the URL provided in your terminal (usually `http://localhost:8501`).
+
+### Using the Dev Container (VS Code)
+
+This project is configured to use VS Code Dev Containers, which provides a consistent development environment.
+
+1. Ensure you have Docker Desktop installed and running.
+2. Install the [Dev Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) in VS Code.
+3. When you open the project folder in VS Code, you should be prompted to "Reopen in Container". Click it.
+4. VS Code will build the container based on `.devcontainer/devcontainer.json`. The Streamlit app will automatically start as defined in the `postAttachCommand`.
+
+## Use Cases
+
+- **Educational Tool**: Understand how CNNs can be applied to medical image analysis.
+- **Research Prototype**: A starting point for researchers working on brain tumor classification.
+- **Clinical Assistant (Proof-of-Concept)**: Demonstrates the potential for AI tools to assist radiologists in diagnosing brain tumors. ***This is not a production-ready medical device and should not be used for actual medical diagnosis without further validation and regulatory approval.***
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request with your changes.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
