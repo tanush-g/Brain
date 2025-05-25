@@ -80,7 +80,7 @@ pip install -r requirements.txt
 Run the test script to verify your GPU is properly configured:
 
 ```bash
-python testGPU.py
+python test_gpu.py
 ```
 
 You should see output similar to:
