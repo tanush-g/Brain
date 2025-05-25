@@ -68,7 +68,7 @@ def run_streamlit_app():
             print("⚠️ GPU configuration module not found, using default settings")
         
         # Run the Streamlit app
-        subprocess.run([sys.executable, "-m", "streamlit", "run", "app.py"], check=True, capture_output=True)
+        subprocess.run([sys.executable, "-m", "streamlit", "run", "app.py"], check=True)
     except KeyboardInterrupt:
         print("\n👋 App stopped by user")
     except subprocess.CalledProcessError as e:
