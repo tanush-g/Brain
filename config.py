@@ -14,10 +14,11 @@ RESOURCES_DIR = BASE_DIR / "resources"
 MODELS_DIR = BASE_DIR / "models"
 LOGS_DIR = BASE_DIR / "logs"
 
-# Ensure directories exist
-RESOURCES_DIR.mkdir(exist_ok=True)
-MODELS_DIR.mkdir(exist_ok=True)
-LOGS_DIR.mkdir(exist_ok=True)
+def initialize_directories():
+    """Ensure required directories exist."""
+    RESOURCES_DIR.mkdir(exist_ok=True)
+    MODELS_DIR.mkdir(exist_ok=True)
+    LOGS_DIR.mkdir(exist_ok=True)
 
 # Data paths
 TRAIN_DATA_PATH = DATA_DIR / "Training"
