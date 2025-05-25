@@ -68,14 +68,14 @@ def run_streamlit_app():
             print("⚠️ GPU configuration module not found, using default settings")
         
         # Run the Streamlit app
-        subprocess.run([sys.executable, "-m", "streamlit", "run", "app.py"], check=True)
+        subprocess.run([sys.executable, "-m", "streamlit", "run", "app.py"], check=True, capture_output=True)
     except KeyboardInterrupt:
         print("\n👋 App stopped by user")
     except subprocess.CalledProcessError as e:
         print(f"❌ Error running app: {e}")
         
         # Check if it's a SIGBUS error (common with Metal)
-        if "SIGBUS" in str(e.stderr) or "Bus error" in str(e.stderr):
+        if "SIGBUS" in e.stderr.decode() or "Bus error" in e.stderr.decode():
             print("\n❌ GPU error detected (SIGBUS). Retrying with CPU only...")
             
             # Force CPU mode
