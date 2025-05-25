@@ -11,7 +11,7 @@ The Brain Tumor Classification application now includes safeguards and optimizat
 SIGBUS (Bus error) errors are a common issue when running TensorFlow models on Apple Silicon Macs using the Metal backend. These errors typically occur due to:
 
 1. Memory allocation/deallocation issues in the Metal plugin
-2. Misaligned memory access 
+2. Misaligned memory access
 3. Aggressive memory usage by TensorFlow when running on Metal
 4. Insufficient memory management for GPU operations
 
@@ -84,7 +84,8 @@ python testGPU.py
 ```
 
 You should see output similar to:
-```
+
+```text
 Physical devices: [PhysicalDevice(name='/physical_device:CPU:0', device_type='CPU'), PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')]
 GPU is available and recognized by TensorFlow.
 GPU Device: PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')
@@ -107,24 +108,6 @@ If you need to manually configure GPU settings, you can modify `gpu_config.py`:
 os.environ['TF_METAL_DEVICE_MEMORY_LIMIT'] = '2048'  # Limit to 2GB 
 os.environ['TF_METAL_DEVICE_MEMORY_FRACTION'] = '0.7'  # Use at most 70% of GPU memory
 ```
-
-## Troubleshooting
-
-### Common Errors
-
-1. **SIGBUS or Bus error**:
-   - This is exactly what our fix addresses. Use `run_app_safe.py` instead of `run_app.py`
-   - If still occurring, try reducing TF_METAL_DEVICE_MEMORY_LIMIT to 1024
-
-2. **Symbol not found errors**:
-   - These indicate version compatibility issues
-   - Make sure TensorFlow and tensorflow-metal versions match:
-     - TF 2.15.0 with Metal 1.1.0
-     - TF 2.16.1 with Metal 1.2.0
-
-3. **Memory errors**:
-   - Try reducing batch size in training
-   - Set `TF_FORCE_GPU_ALLOW_GROWTH=true` in your environment
 
 ### Testing GPU Performance
 
@@ -183,12 +166,6 @@ The Metal backend has specific memory management requirements. The fixed app inc
 2. Metal memory limits to prevent crashes
 3. Fallback to CPU if GPU encounters errors
 
-## Performance Notes
-
-- GPU acceleration provides significant speedups for batch processing but may have higher overhead for single-image inference
-- Larger matrix operations show more dramatic speedups on GPU vs CPU
-- First-time GPU operations may be slower due to compilation overhead
-
 ## Troubleshooting
 
 If you encounter GPU-related errors:
@@ -200,6 +177,7 @@ If you encounter GPU-related errors:
 ## Additional Information
 
 For more details on TensorFlow Metal support, see:
+
 - [Apple's TensorFlow Metal Plugin](https://developer.apple.com/metal/tensorflow-plugin/)
 - [TensorFlow Metal Documentation](https://developer.apple.com/documentation/tensorflow-metal)
 
