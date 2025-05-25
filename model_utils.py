@@ -4,7 +4,8 @@ import numpy as np
 from pathlib import Path
 from typing import Dict, Tuple, Optional, Union
 import tensorflow as tf
-from tensorflow import keras
+import keras
+from keras.models import load_model
 from PIL import Image, ImageEnhance
 
 from config import (

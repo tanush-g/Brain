@@ -47,19 +47,20 @@ from sklearn.utils import shuffle
 import tensorflow as tf
 import keras
 from keras.models import Sequential
-from keras.models import load_model  
+from keras.models import load_model
 from keras.layers import MaxPooling2D
-from keras.layers import Conv2D    
+from keras.layers import Conv2D
 from keras.layers import Dense
-from keras.layers import Flatten   
-from keras.layers import Input       
-from keras.optimizers import Adam  
+from keras.layers import Flatten
+from keras.layers import Input
+from keras.optimizers import Adam
 
 # Image augmentation imports
-from keras.utils import load_img      
-from keras.utils import plot_model    
-from keras.preprocessing import image
-from keras.layers import RandomRotation 
+from keras.utils import load_img, img_to_array
+from keras.utils import plot_model
+# Modern approach for Keras 3.x (removing ImageDataGenerator dependency)
+# from tensorflow.keras.preprocessing.image import ImageDataGenerator  # This doesn't work with Keras 3.x
+from keras.layers import RandomRotation
 from keras.layers import RandomContrast
 from keras.layers import RandomZoom
 from keras.layers import RandomFlip
@@ -67,7 +68,7 @@ from keras.layers import RandomTranslation
 
 # Training Model callbacks
 from keras.callbacks import ReduceLROnPlateau
-from keras.callbacks import ModelCheckpoint 
+from keras.callbacks import ModelCheckpoint
 
 from visualkeras import layered_view 
 
@@ -720,8 +721,8 @@ plot_misclassified_samples(model=model,
 # %%
 # Function to load and preprocess an image
 def load_and_preprocess_image(image_path, image_shape=(168, 168)):
-    img = image.load_img(image_path, target_size=image_shape, color_mode='grayscale')
-    img_array = image.img_to_array(img) / 255.0
+    img = load_img(image_path, target_size=image_shape, color_mode='grayscale')
+    img_array = img_to_array(img) / 255.0
     img_array = np.expand_dims(img_array, axis=0)  # Add the batch dimension
     return img_array
 
