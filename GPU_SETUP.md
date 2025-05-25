@@ -114,7 +114,7 @@ os.environ['TF_METAL_DEVICE_MEMORY_FRACTION'] = '0.7'  # Use at most 70% of GPU 
 To test the actual performance gain from GPU:
 
 ```bash
-python test_gpu_fix.py
+python test_gpu.py
 ```
 
 This will show you if the model loads and runs correctly with GPU acceleration.
@@ -156,7 +156,7 @@ export TF_CPP_MIN_LOG_LEVEL="1"  # 0=all, 1=no INFO, 2=no INFO/WARNING, 3=no INF
 The app has been updated to better handle GPU acceleration with proper error handling. Use the following scripts to run the application:
 
 - `run_app.py`: Runs the app with improved GPU error handling
-- `test_gpu_inference_fixed.py`: Tests GPU acceleration with the brain tumor model
+- `test_gpu.py`: Tests GPU acceleration with the brain tumor model
 
 ## GPU Memory Management
 
