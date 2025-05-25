@@ -275,7 +275,7 @@ def preprocess_image_from_bytes(image_bytes: bytes, target_size: Tuple[int, int]
     utils = ModelUtils()
     return utils.preprocess_image_from_bytes(image_bytes, target_size)
 
-def predict(model, img_array: np.ndarray, class_mappings: Dict[str, int]) -> Tuple[str, np.ndarray]:
+def predict(model, img_array: np.ndarray) -> Tuple[str, np.ndarray]:
     """Make prediction (backward compatibility function)."""
     utils = ModelUtils()
     pred_class, probs, _ = utils.predict(img_array, model)
