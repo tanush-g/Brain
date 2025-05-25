@@ -155,7 +155,7 @@ export TF_CPP_MIN_LOG_LEVEL="1"  # 0=all, 1=no INFO, 2=no INFO/WARNING, 3=no INF
 
 The app has been updated to better handle GPU acceleration with proper error handling. Use the following scripts to run the application:
 
-- `run_fixed_app.py`: Runs the app with improved GPU error handling
+- `run_app.py`: Runs the app with improved GPU error handling
 - `test_gpu_inference_fixed.py`: Tests GPU acceleration with the brain tumor model
 
 ## GPU Memory Management
