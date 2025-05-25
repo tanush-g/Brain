@@ -70,30 +70,30 @@ def test_model_loading():
         return False
 
 if __name__ == "__main__":
-    print("=" * 50)
-    print("🧠 Testing GPU Fix for Brain Tumor Classifier")
-    print("=" * 50)
+    logger.info("=" * 50)
+    logger.info("🧠 Testing GPU Fix for Brain Tumor Classifier")
+    logger.info("=" * 50)
     
     # Log TensorFlow version
-    print(f"TensorFlow version: {tf.__version__}")
+    logger.info(f"TensorFlow version: {tf.__version__}")
     
     # Show physical devices
     devices = tf.config.list_physical_devices()
-    print(f"Physical devices: {devices}")
+    logger.info(f"Physical devices: {devices}")
     
     # Check GPU specifically
     gpus = tf.config.list_physical_devices('GPU')
     if gpus:
-        print(f"GPU devices: {gpus}")
+        logger.info(f"GPU devices: {gpus}")
     else:
-        print("No GPU devices detected")
+        logger.info("No GPU devices detected")
     
     # Test model loading and prediction
     success = test_model_loading()
     
     if success:
-        print("\n✅ Test completed successfully!")
-        print("The GPU configuration appears to be working correctly.")
+        logger.info("\n✅ Test completed successfully!")
+        logger.info("The GPU configuration appears to be working correctly.")
     else:
-        print("\n❌ Test failed!")
-        print("There may still be issues with the GPU configuration.")
+        logger.error("\n❌ Test failed!")
+        logger.error("There may still be issues with the GPU configuration.")
