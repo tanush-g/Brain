@@ -9,6 +9,14 @@ Usage:
     python train_model.py [--epochs EPOCHS] [--batch-size BATCH_SIZE] [--evaluate-only]
 """
 
+# Import GPU configuration first to safely initialize GPU
+try:
+    from gpu_config import initialize_gpu
+    initialize_gpu()
+except ImportError:
+    # If gpu_config is not available, continue without it
+    pass
+
 import argparse
 import logging
 import os
@@ -71,9 +79,13 @@ class BrainTumorTrainer:
         gpu_devices = tf.config.list_physical_devices('GPU')
         if gpu_devices:
             logger.info(f"GPU Available: {gpu_devices}")
-            # Enable memory growth to prevent TensorFlow from allocating all GPU memory
-            for gpu in gpu_devices:
-                tf.config.experimental.set_memory_growth(gpu, True)
+            # Configure memory growth for GPU - but only if not already done in initialize_gpu()
+            try:
+                # This is just a safeguard in case initialize_gpu() wasn't called
+                for gpu in gpu_devices:
+                    tf.config.experimental.set_memory_growth(gpu, True)
+            except RuntimeError as e:
+                logger.warning(f"GPU memory growth already configured: {e}")
         else:
             logger.warning("GPU not available. Training will use CPU.")
             logger.info("For M1 MacBooks, ensure TensorFlow-Metal is installed.")
@@ -342,13 +354,39 @@ class BrainTumorTrainer:
         
         # Train model
         logger.info(f"Starting training for {self.config['epochs']} epochs...")
-        self.history = self.model.fit(
-            self.train_ds,
-            epochs=self.config['epochs'],
-            validation_data=self.test_ds,
-            callbacks=callbacks,
-            verbose=self.config.get('verbose', 1)
-        )
+        try:
+            self.history = self.model.fit(
+                self.train_ds,
+                epochs=self.config['epochs'],
+                validation_data=self.test_ds,
+                callbacks=callbacks,
+                verbose=self.config.get('verbose', 1)
+            )
+        except (tf.errors.ResourceExhaustedError, tf.errors.InternalError, 
+                tf.errors.UnknownError, tf.errors.UnavailableError) as e:
+            logger.error(f"GPU error during training: {e}")
+            logger.info("Attempting to fall back to CPU...")
+            
+            try:
+                # Try to force CPU mode
+                from gpu_config import force_cpu_mode
+                force_cpu_mode()
+                
+                # Rebuild model to ensure it's on CPU
+                self.model = self.build_model()
+                
+                # Try training again
+                logger.info("Restarting training on CPU...")
+                self.history = self.model.fit(
+                    self.train_ds,
+                    epochs=self.config['epochs'],
+                    validation_data=self.test_ds,
+                    callbacks=callbacks,
+                    verbose=self.config.get('verbose', 1)
+                )
+            except Exception as cpu_error:
+                logger.error(f"Training failed on CPU as well: {cpu_error}")
+                raise RuntimeError("Training failed on both GPU and CPU. Check logs for details.")
         
         # Save final model
         final_model_path = get_model_save_path()
@@ -360,8 +398,12 @@ class BrainTumorTrainer:
     def evaluate_model(self, model_path: Optional[str] = None) -> Dict:
         """Evaluate trained model"""
         if model_path:
-            self.model = load_model(model_path)
-            logger.info(f"Loaded model from {model_path}")
+            try:
+                self.model = load_model(model_path)
+                logger.info(f"Loaded model from {model_path}")
+            except Exception as e:
+                logger.error(f"Error loading model from {model_path}: {e}")
+                raise
         
         if self.model is None:
             raise ValueError("No model available for evaluation")
@@ -369,24 +411,65 @@ class BrainTumorTrainer:
         if self.test_ds is None:
             logger.warning("Test data not loaded, loading now...")
             self.load_and_prepare_data()
+            
+            if self.test_ds is None:
+                raise ValueError("Failed to load test data")
         
         # Evaluate on test data
-        test_loss, test_accuracy = self.model.evaluate(self.test_ds, verbose=0)
-        
-        logger.info(f"Test accuracy: {test_accuracy:.4f}")
-        logger.info(f"Test loss: {test_loss:.4f}")
-        
-        # Generate predictions for detailed metrics
-        y_true = []
-        y_pred = []
-        
-        for images, labels in self.test_ds.unbatch():
-            true_label = np.argmax(labels.numpy())
-            pred = self.model.predict(tf.expand_dims(images, 0), verbose=0)
-            pred_label = np.argmax(pred)
+        try:
+            test_loss, test_accuracy = self.model.evaluate(self.test_ds, verbose=0)
             
-            y_true.append(true_label)
-            y_pred.append(pred_label)
+            logger.info(f"Test accuracy: {test_accuracy:.4f}")
+            logger.info(f"Test loss: {test_loss:.4f}")
+            
+            # Generate predictions for detailed metrics
+            y_true = []
+            y_pred = []
+            
+            for images, labels in self.test_ds.unbatch():
+                true_label = np.argmax(labels.numpy())
+                try:
+                    pred = self.model.predict(tf.expand_dims(images, 0), verbose=0)
+                    pred_label = np.argmax(pred)
+                    
+                    y_true.append(true_label)
+                    y_pred.append(pred_label)
+                except Exception as pred_error:
+                    logger.warning(f"Error predicting single sample: {pred_error}")
+                    # Skip this sample
+                    continue
+        except (tf.errors.ResourceExhaustedError, tf.errors.InternalError, 
+                tf.errors.UnknownError, tf.errors.UnavailableError) as e:
+            logger.error(f"GPU error during evaluation: {e}")
+            logger.info("Attempting to fall back to CPU...")
+            
+            try:
+                # Try to force CPU mode
+                from gpu_config import force_cpu_mode
+                force_cpu_mode()
+                
+                # Try to reload the model to ensure it's on CPU
+                if model_path:
+                    self.model = load_model(model_path)
+                
+                # Try evaluating again
+                test_loss, test_accuracy = self.model.evaluate(self.test_ds, verbose=0)
+                logger.info(f"Test accuracy (CPU): {test_accuracy:.4f}")
+                logger.info(f"Test loss (CPU): {test_loss:.4f}")
+                
+                # Generate predictions on CPU
+                y_true = []
+                y_pred = []
+                for images, labels in self.test_ds.unbatch():
+                    true_label = np.argmax(labels.numpy())
+                    pred = self.model.predict(tf.expand_dims(images, 0), verbose=0)
+                    pred_label = np.argmax(pred)
+                    
+                    y_true.append(true_label)
+                    y_pred.append(pred_label)
+            except Exception as cpu_error:
+                logger.error(f"Evaluation failed on CPU as well: {cpu_error}")
+                raise RuntimeError("Evaluation failed on both GPU and CPU. Check logs for details.")
         
         # Calculate detailed metrics
         cm = confusion_matrix(y_true, y_pred)
