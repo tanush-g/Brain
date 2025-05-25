@@ -59,11 +59,35 @@ def run_streamlit_app():
     print("🔄 Press Ctrl+C to stop the app")
     
     try:
+        # First try to import and use our GPU configuration
+        try:
+            from gpu_config import initialize_gpu
+            initialize_gpu()
+            print("✅ GPU configuration initialized")
+        except ImportError:
+            print("⚠️ GPU configuration module not found, using default settings")
+        
+        # Run the Streamlit app
         subprocess.run([sys.executable, "-m", "streamlit", "run", "app.py"], check=True)
     except KeyboardInterrupt:
         print("\n👋 App stopped by user")
     except subprocess.CalledProcessError as e:
         print(f"❌ Error running app: {e}")
+        
+        # Check if it's a SIGBUS error (common with Metal)
+        if "SIGBUS" in str(e.stderr) or "Bus error" in str(e.stderr):
+            print("\n❌ GPU error detected (SIGBUS). Retrying with CPU only...")
+            
+            # Force CPU mode
+            os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+            os.environ['TF_DISABLE_MLIR_GRAPH_OPTIMIZATION'] = '1'
+            
+            try:
+                # Second attempt - CPU only
+                print("🔄 Restarting with CPU-only mode...")
+                subprocess.run([sys.executable, "-m", "streamlit", "run", "app.py"], check=True)
+            except Exception as e2:
+                print(f"❌ Failed to run in CPU mode as well: {e2}")
 
 def main():
     print("🧠 Brain Tumor Classification App Launcher")

@@ -7,3 +7,4 @@ __pycache__/
 .vscode/
 brain-tumor-mri-dataset.zip
 brain-tumors-dataset.zip
+.log

@@ -1,8 +1,17 @@
+# Import GPU configuration first to safely initialize GPU
+try:
+    from gpu_config import initialize_gpu
+    initialize_gpu()
+except ImportError:
+    # If gpu_config is not available, continue without it
+    pass
+
 import streamlit as st
 import pandas as pd
 from PIL import Image
 import io
 import time
+import tensorflow as tf
 
 # Check for plotly availability
 try:
@@ -127,6 +136,19 @@ def get_model_utils():
             st.error(f"❌ Failed to load model: {e}")
             st.info("Make sure the model.keras file exists in the project directory.")
             return None
+
+def add_gpu_status_to_sidebar():
+    """Add GPU status information to the sidebar"""
+    try:
+        gpus = tf.config.list_physical_devices('GPU')
+        if gpus:
+            st.sidebar.success("✅ Using GPU acceleration")
+            st.sidebar.info(f"GPU device: {gpus[0].name if hasattr(gpus[0], 'name') else 'Apple Metal'}")
+        else:
+            st.sidebar.warning("⚠️ Running in CPU mode (no GPU acceleration)")
+    except Exception as e:
+        st.sidebar.error(f"⚠️ Error checking GPU status: {str(e)}")
+        st.sidebar.warning("⚠️ Running in CPU mode due to error")
 
 def display_prediction_results(result, image_bytes):
     """Display prediction results with enhanced visualization."""
@@ -394,6 +416,8 @@ def sidebar_info():
         - 🟢 **No Tumor**: Healthy brain tissue
         - 🔵 **Pituitary**: Affects pituitary gland
         """)
+    
+    add_gpu_status_to_sidebar()
     
     return uploaded_file, enhance_contrast, show_confidence_details, show_class_info
 
