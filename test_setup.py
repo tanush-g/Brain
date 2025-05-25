@@ -211,9 +211,11 @@ def main():
             print("🚀 You can now run: python run_app.py")
         else:
             print("📝 Train the model first: python train_model.py")
+        sys.exit(0)  # Exit with success
     else:
         print("⚠️  Some tests failed. Please check the errors above.")
         print("💡 Try running: pip install -r requirements.txt")
+        sys.exit(1)  # Exit with failure
 
 if __name__ == "__main__":
     main()
