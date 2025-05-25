@@ -23,23 +23,21 @@ import tensorflow as tf
 from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.utils import shuffle
 
-# Keras imports
-import keras
+# TensorFlow/Keras imports
+from tensorflow import keras
 from keras.models import Sequential, load_model
 from keras.layers import (Conv2D, MaxPooling2D, Dense, Flatten, Input, 
                           RandomRotation, RandomContrast, RandomZoom, 
                           RandomFlip, RandomTranslation, Dropout)
 from keras.optimizers import Adam
 from keras.callbacks import ReduceLROnPlateau, ModelCheckpoint, EarlyStopping
-from keras.utils import plot_model
 
 # Local imports
 from config import (
     TRAINING_CONFIG, MODEL_CONFIG, AUGMENTATION_CONFIG, CALLBACK_CONFIG,
     IMAGE_SIZE, IMAGE_SHAPE, CLASS_MAPPINGS, INVERSE_CLASS_MAPPINGS,
-    get_data_paths, get_model_save_path, get_class_info, setup_logging,
-    VISUALIZATION_CONFIG, PERFORMANCE_THRESHOLDS, RESOURCES_DIR,
-    CHECKPOINT_PATH, BEST_MODEL_PATH
+    get_data_paths, get_model_save_path, setup_logging,
+    VISUALIZATION_CONFIG, RESOURCES_DIR, CHECKPOINT_PATH
 )
 
 # Setup logging
@@ -127,8 +125,9 @@ class BrainTumorTrainer:
         logger.info(f"Found {len(data_paths)} images across {len(set(data_labels))} classes")
         
         if shuffle_data:
-            data_paths, data_labels = shuffle(data_paths, data_labels, 
-                                            random_state=self.config['random_seed'])
+            shuffled_data = shuffle(data_paths, data_labels, 
+                                  random_state=self.config['random_seed'])
+            data_paths, data_labels = shuffled_data
         
         return data_paths, data_labels
     
@@ -503,7 +502,7 @@ def main():
         trainer.plot_confusion_matrix(
             results['confusion_matrix'], 
             class_names,
-            save_path=RESOURCES_DIR / "confusion_matrix_evaluation.png"
+            save_path=str(RESOURCES_DIR / "confusion_matrix_evaluation.png")
         )
         
     else:
@@ -513,7 +512,7 @@ def main():
         
         # Plot training history
         trainer.plot_training_history(
-            save_path=RESOURCES_DIR / "training_history.png"
+            save_path=str(RESOURCES_DIR / "training_history.png")
         )
         
         # Evaluate and plot results
@@ -522,7 +521,7 @@ def main():
         trainer.plot_confusion_matrix(
             results['confusion_matrix'], 
             class_names,
-            save_path=RESOURCES_DIR / "confusion_matrix.png"
+            save_path=str(RESOURCES_DIR / "confusion_matrix.png")
         )
         
         logger.info("Training completed successfully!")

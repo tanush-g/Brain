@@ -3,7 +3,8 @@ import logging
 import numpy as np
 from pathlib import Path
 from typing import Dict, Tuple, Optional, Union
-import keras
+import tensorflow as tf
+from tensorflow import keras
 from PIL import Image, ImageEnhance
 
 from config import (
