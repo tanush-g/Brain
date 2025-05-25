@@ -1,10 +1,12 @@
-# Import GPU configuration first to safely initialize GPU
+# Configure environment based on deployment platform
 try:
-    from gpu_config import initialize_gpu
-    initialize_gpu()
+    from deployment_config import configure_deployment, get_gpu_info
+    deployment_platform = configure_deployment()
 except ImportError:
-    # If gpu_config is not available, continue without it
-    pass
+    # Fallback if deployment_config is not available
+    deployment_platform = "Unknown (using default configuration)"
+    def get_gpu_info():
+        return False, "GPU status unknown"
 
 import streamlit as st
 import pandas as pd
@@ -132,20 +134,29 @@ def get_model_utils():
             utils.load_trained_model()
             st.success("✅ AI model loaded successfully!")
             return utils
+        except FileNotFoundError as e:
+            st.error(f"❌ Model file not found: {e}")
+            st.info("Make sure the model.keras file exists in the project directory.")
+            return None
         except Exception as e:
             st.error(f"❌ Failed to load model: {e}")
-            st.info("Make sure the model.keras file exists in the project directory.")
+            st.info("There was an error loading the model. This might be due to compatibility issues.")
             return None
 
 def add_gpu_status_to_sidebar():
     """Add GPU status information to the sidebar"""
+    # Display deployment platform
+    st.sidebar.info(f"🚀 Deployment: {deployment_platform}")
+    
+    # Check GPU status using our safe detection function
     try:
-        gpus = tf.config.list_physical_devices('GPU')
-        if gpus:
+        is_gpu_available, gpu_info = get_gpu_info()
+        if is_gpu_available:
             st.sidebar.success("✅ Using GPU acceleration")
-            st.sidebar.info(f"GPU device: {gpus[0].name if hasattr(gpus[0], 'name') else 'Apple Metal'}")
+            st.sidebar.info(f"GPU info: {gpu_info}")
         else:
-            st.sidebar.warning("⚠️ Running in CPU mode (no GPU acceleration)")
+            st.sidebar.warning("⚠️ Running in CPU mode")
+            st.sidebar.info(gpu_info)
     except Exception as e:
         st.sidebar.error(f"⚠️ Error checking GPU status: {str(e)}")
         st.sidebar.warning("⚠️ Running in CPU mode due to error")
