@@ -184,8 +184,8 @@ This project implements various visualization and analysis techniques to interpr
 
 ### Clinical Interpretation Aids
 
-- **Activation Maps**: Visualization of CNN attention using Grad-CAM techniques
-- **Feature Importance**: Analysis of which image regions influenced the classification
+- **Activation Maps**: Visualization of CNN attention using Grad-CAM techniques (TODO)
+- **Feature Importance**: Analysis of which image regions influenced the classification (TODO)
 - **Probability Distribution**: Displays confidence levels across all possible classes
 
 ### Interactive Exploration
@@ -201,8 +201,8 @@ The Streamlit application provides interactive tools for exploring model behavio
 
 For model development and improvement, several specialized visualizations are available:
 
-- **Layer Activation Viewer**: Examines activations at different network depths
-- **Filter Visualization**: Displays learned convolutional filters
+- **Layer Activation Viewer**: Examines activations at different network depths (TODO)
+- **Filter Visualization**: Displays learned convolutional filters (TODO)
 - **Augmentation Preview**: Visualizes the effect of data augmentation settings
 
 These visualization and analysis tools make the project valuable not just for classification, but also as an educational resource for understanding both the technical aspects of deep learning and the medical characteristics of brain tumors.
