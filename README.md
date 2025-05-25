@@ -6,6 +6,7 @@ This project aims to classify brain MRI images into four categories: Glioma, Men
 
 - **CNN Model**: A Keras-based Convolutional Neural Network trained for classifying brain tumors.
 - **Interactive Web App**: A Streamlit application (`app.py`) for easy interaction with the model. Users can upload MRI images and view predictions.
+- **GPU Acceleration**: Support for Apple Silicon GPU acceleration via tensorflow-metal for faster inference.
 - **Data Preprocessing**: Includes scripts and functions for preparing MRI image data for training and prediction.
 - **Model Evaluation**: Jupyter notebook (`tumorClassification.py`) detailing the model training, evaluation, and visualization of results (e.g., confusion matrix, accuracy/loss plots).
 - **Dev Environment**: Pre-configured development environment using Dev Containers for consistent setup.
@@ -190,7 +191,15 @@ This project showcases the application of CNNs in medical imaging, providing a v
     pip install -r requirements.txt
     ```
 
-4. **Download the dataset:**
+4. **For GPU acceleration on Apple Silicon (optional):**
+
+    ```bash
+    pip install tensorflow==2.16.1 tensorflow-metal==1.2.0
+    ```
+    
+    See [GPU_SETUP.md](GPU_SETUP.md) for detailed GPU acceleration setup and troubleshooting.
+
+5. **Download the dataset:**
     The dataset is available on Kaggle: [Brain Tumor MRI Dataset](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset). Download it and place the `Training` and `Testing` folders into the `brain-tumor-mri-dataset` directory at the root of the project.
 
 5. **Train the model (Optional):**
@@ -207,7 +216,13 @@ This project showcases the application of CNNs in medical imaging, providing a v
 Once the `model.keras` file is present (either by training or by using a pre-trained one provided with the project), you can run the Streamlit application:
 
 ```bash
-streamlit run app.py
+python run_app.py
+```
+
+For improved GPU support on Apple Silicon:
+
+```bash
+python run_fixed_app.py
 ```
 
 This will start a local web server, and you can interact with the application by navigating to the URL provided in your terminal (usually `http://localhost:8501`).
