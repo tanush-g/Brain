@@ -58,8 +58,7 @@ from keras.optimizers import Adam
 # Image augmentation imports
 from keras.utils import load_img, img_to_array
 from keras.utils import plot_model
-# Modern approach for Keras 3.x (removing ImageDataGenerator dependency)
-# from tensorflow.keras.preprocessing.image import ImageDataGenerator  # This doesn't work with Keras 3.x
+# Modern approach for Keras 3.x
 from keras.layers import RandomRotation
 from keras.layers import RandomContrast
 from keras.layers import RandomZoom
