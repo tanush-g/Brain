@@ -67,7 +67,7 @@ def main():
     print("\n📦 Key Packages:")
     packages = [
         "tensorflow", "keras", "numpy", "PIL", "streamlit", 
-        "sklearn", "matplotlib", "seaborn", "plotly"
+        "sklearn", "matplotlib", "seaborn" # Removed "plotly"
     ]
     
     for package in packages:

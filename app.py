@@ -15,18 +15,10 @@ import io
 import time
 import tensorflow as tf
 
-# Check for plotly availability
-try:
-    import plotly.express as px
-    PLOTLY_AVAILABLE = True
-except ImportError:
-    PLOTLY_AVAILABLE = False
-    st.warning("📊 Plotly not available. Install with: pip install plotly")
-
 from model_utils import ModelUtils
 from config import (
     STREAMLIT_CONFIG, CLASS_DESCRIPTIONS,
-    PERFORMANCE_THRESHOLDS, IMAGE_SIZE
+    PERFORMANCE_THRESHOLDS, IMAGE_SIZE, NUM_CLASSES
 )
 
 # Configure Streamlit page
@@ -135,34 +127,8 @@ def display_prediction_results(result, image_bytes):
             for class_name, prob in result['all_probabilities'].items()
         ]).sort_values('Probability', ascending=False)
         
-        if PLOTLY_AVAILABLE:
-            # Create bar chart with Plotly
-            import plotly.express as px
-            fig = px.bar(
-                probs_df, 
-                x='Probability', 
-                y='Class',
-                orientation='h',
-                color='Is_Predicted',
-                color_discrete_map={True: '#FF6B6B', False: '#E0E0E0'},
-                title="Class Probabilities"
-            )
-            
-            fig.update_layout(
-                showlegend=False,
-                height=300,
-                yaxis={'categoryorder': 'total ascending'}
-            )
-            
-            fig.update_traces(
-                texttemplate='%{x:.1%}',
-                textposition='outside'
-            )
-            
-            st.plotly_chart(fig, use_container_width=True)
-        else:
-            # Fallback to simple bar chart with streamlit
-            st.bar_chart(probs_df.set_index('Class')['Probability'])
+        # Always use Streamlit's bar_chart
+        st.bar_chart(probs_df.set_index('Class')['Probability'])
         
         # Uncertainty analysis
         uncertainty = result['uncertainty']
@@ -304,8 +270,8 @@ def sidebar_info():
     
     col1, col2 = st.sidebar.columns(2)
     with col1:
-        st.markdown("**Classes:** 4")
-        st.markdown("**Input Size:** 168×168")
+        st.markdown(f"**Classes:** {NUM_CLASSES}")
+        st.markdown(f"**Input Size:** {IMAGE_SIZE[0]}×{IMAGE_SIZE[1]}")
     
     with col2:
         st.markdown("**Model Type:** CNN")
