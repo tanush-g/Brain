@@ -290,6 +290,37 @@ def sidebar_info():
     
     return uploaded_file, enhance_contrast, show_confidence_details, show_class_info
 
+def add_footer():
+    """Add footer with additional information."""
+    st.markdown("---")
+    
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        #### 🔬 About the Technology
+        This AI model uses deep learning (CNN) to analyze brain MRI scans and classify different types of tumors with high accuracy.
+        """)
+    
+    with col2:
+        st.markdown("""
+        #### 📊 Model Performance
+        - **Accuracy**: ~95% on test data (refer to model training for exact metrics)
+        - **Training**: On a dataset of 7,000+ MRI images.
+        - **Classes**: Detects 4 categories (Glioma, Meningioma, No Tumor, Pituitary).
+        """)
+    
+    with col3:
+        st.markdown("""
+        #### ⚡ Quick Tips
+        - Use clear, high-quality MRI scans.
+        - Ensure good contrast in images if possible.
+        - Always check prediction confidence scores.
+        """)
+    
+    st.markdown("---")
+    st.caption("🧠 Brain Tumor AI Classifier | Built with ❤️ & TensorFlow & Streamlit. For educational and research purposes only. Not for medical diagnosis.")
+
 def main():
     st.title("🧠 Brain Tumor AI Classifier")
     st.subheader("Advanced AI-powered brain tumor detection and classification from MRI scans")
@@ -366,107 +397,74 @@ def main():
             - Can affect hormone production
             - Often requires specialized treatment
             """)
-        
-        add_footer()
-        return
-    
-    if uploaded_file.size > STREAMLIT_CONFIG['max_file_size'] * 1024 * 1024:
-        st.error(f"File size too large. Maximum allowed: {STREAMLIT_CONFIG['max_file_size']}MB")
-        return
-    
-    model_utils = get_model_utils()
-    if model_utils is None:
-        st.error("Failed to load the AI model. Please check if the model file exists.")
-        return
-    
-    try:
-        image_bytes = uploaded_file.read()
-        
-        progress_bar = st.progress(0)
-        status_text = st.empty()
-        
-        with st.spinner("🔍 Analyzing your MRI image..."):
-            progress_bar.progress(20)
-            status_text.text("Loading image...")
-            time.sleep(0.5)
-            
-            progress_bar.progress(50)
-            status_text.text("Preprocessing image...")
-            
-            img_array = model_utils.preprocess_image_from_bytes(
-                image_bytes, 
-                enhance_contrast=enhance_contrast
-            )
-            
-            progress_bar.progress(80)
-            status_text.text("Running AI analysis...")
-            time.sleep(0.5)
-            
-            result = model_utils.predict_with_confidence_analysis(img_array)
-            
-            progress_bar.progress(100)
-            status_text.text("Analysis complete!")
-            time.sleep(0.3)
-        
-        progress_bar.empty()
-        status_text.empty()
-        
-        st.success("✅ Analysis complete!")
-        display_prediction_results(result, image_bytes)
-        
-        if show_confidence_details:
-            with st.expander("🔍 Detailed Confidence Analysis", expanded=False):
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    st.metric("Prediction Confidence", f"{result['confidence']:.1%}")
-                    st.metric("Prediction Uncertainty", f"{result['uncertainty']:.1%}")
-                
-                with col2:
-                    st.metric("High Confidence?", "Yes" if result['high_confidence'] else "No")
-                    st.metric("Acceptable Confidence?", "Yes" if result['acceptable_confidence'] else "No")
-                
-                prob_df = pd.DataFrame([
-                    {'Class': class_name, 'Probability': f"{prob:.4f}", 'Percentage': f"{prob:.1%}"}
-                    for class_name, prob in result['all_probabilities'].items()
-                ]).sort_values('Probability', ascending=False, key=lambda x: x.astype(float))
-                
-                st.dataframe(prob_df, use_container_width=True)
-    
-    except Exception as e:
-        st.error(f"Error processing image: {str(e)}")
-        st.info("Please try uploading a different image or contact support if the problem persists.")
 
-def add_footer():
-    """Add footer with additional information."""
-    st.markdown("---")
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown("""
-        #### 🔬 About the Technology
-        This AI model uses deep learning (CNN) to analyze brain MRI scans and classify different types of tumors with high accuracy.
-        """)
-    
-    with col2:
-        st.markdown("""
-        #### 📊 Model Performance
-        - **Accuracy**: ~95% on test data (refer to model training for exact metrics)
-        - **Training**: On a dataset of 7,000+ MRI images.
-        - **Classes**: Detects 4 categories (Glioma, Meningioma, No Tumor, Pituitary).
-        """)
-    
-    with col3:
-        st.markdown("""
-        #### ⚡ Quick Tips
-        - Use clear, high-quality MRI scans.
-        - Ensure good contrast in images if possible.
-        - Always check prediction confidence scores.
-        """)
-    
-    st.markdown("---")
-    st.caption("🧠 Brain Tumor AI Classifier | Built with ❤️ & TensorFlow & Streamlit. For educational and research purposes only. Not for medical diagnosis.")
+    elif uploaded_file:
+        if uploaded_file.size > STREAMLIT_CONFIG['max_file_size'] * 1024 * 1024:
+            st.error(f"File size too large. Maximum allowed: {STREAMLIT_CONFIG['max_file_size']}MB")
+        else:
+            model_utils = get_model_utils()
+            if model_utils is None:
+                st.error("Failed to load the AI model. Please check if the model file exists.")
+            else:
+                try:
+                    image_bytes = uploaded_file.read()
+                    
+                    progress_bar = st.progress(0)
+                    status_text = st.empty()
+                    
+                    with st.spinner("🔍 Analyzing your MRI image..."):
+                        progress_bar.progress(20)
+                        status_text.text("Loading image...")
+                        time.sleep(0.5)
+                        
+                        progress_bar.progress(50)
+                        status_text.text("Preprocessing image...")
+                        
+                        img_array = model_utils.preprocess_image_from_bytes(
+                            image_bytes, 
+                            enhance_contrast=enhance_contrast
+                        )
+                        
+                        progress_bar.progress(80)
+                        status_text.text("Running AI analysis...")
+                        time.sleep(0.5)
+                        
+                        result = model_utils.predict_with_confidence_analysis(img_array)
+                        
+                        progress_bar.progress(100)
+                        status_text.text("Analysis complete!")
+                        time.sleep(0.3)
+                    
+                    progress_bar.empty()
+                    status_text.empty()
+                    
+                    st.success("✅ Analysis complete!")
+                    display_prediction_results(result, image_bytes)
+                    
+                    if show_confidence_details:
+                        with st.expander("🔍 Detailed Confidence Analysis", expanded=False):
+                            col1, col2 = st.columns(2)
+                            
+                            with col1:
+                                st.metric("Prediction Confidence", f"{result['confidence']:.1%}")
+                                st.metric("Prediction Uncertainty", f"{result['uncertainty']:.1%}")
+                            
+                            with col2:
+                                st.metric("High Confidence?", "Yes" if result['high_confidence'] else "No")
+                                st.metric("Acceptable Confidence?", "Yes" if result['acceptable_confidence'] else "No")
+                            
+                            prob_df = pd.DataFrame([
+                                {'Class': class_name, 'Probability': f"{prob:.4f}", 'Percentage': f"{prob:.1%}"}
+                                for class_name, prob in result['all_probabilities'].items()
+                            ]).sort_values('Probability', ascending=False, key=lambda x: x.astype(float))
+                            
+                            st.dataframe(prob_df, use_container_width=True)
+                
+                except Exception as e:
+                    st.error(f"Error processing image: {str(e)}")
+                    st.info("Please try uploading a different image or contact support if the problem persists.")
+
+    add_footer()
 
 if __name__ == "__main__":
     main()
