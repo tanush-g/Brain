@@ -198,7 +198,7 @@ def add_demo_section():
         st.markdown("""
         #### Upload Guidelines
         - Clear MRI brain scans work best
-        - Supported formats: JPG, PNG, BMP, TIFF
+        - Supported formats: JPG, JPEG, PNG, BMP, TIFF, DCM, TIF
         - Axial, sagittal, or coronal views
         - T1 or T2 weighted images preferred
         """)
@@ -225,7 +225,7 @@ def sidebar_info():
     
     with st.sidebar.expander("📋 Upload Guidelines", expanded=False):
         st.markdown("""
-        **Supported formats:** JPG, PNG, BMP, TIFF
+        **Supported formats:** JPG, JPEG, PNG, BMP, TIFF, DCM, TIF
         
         **Recommended:** 
         - Clear MRI brain scans
@@ -345,7 +345,7 @@ def main():
             st.markdown("""
             #### Step 1: Upload
             - Use the sidebar to upload your MRI image
-            - Supported: JPG, PNG, BMP, TIFF
+            - Supported: JPG, JPEG, PNG, BMP, TIFF, DCM, TIF
             - Max size: 10MB
             - Best: Clear brain scans
             """)

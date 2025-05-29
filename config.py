@@ -127,7 +127,7 @@ STREAMLIT_CONFIG = {
     'layout': "wide",
     'initial_sidebar_state': "expanded",
     'max_file_size': 10,  # MB
-    'allowed_extensions': ["jpg", "jpeg", "png", "bmp", "tiff", "dcm"],
+    'allowed_extensions': ["jpg", "jpeg", "png", "bmp", "tiff", "dcm", "tif"],
 }
 
 # Visualization parameters
