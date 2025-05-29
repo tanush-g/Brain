@@ -8,3 +8,4 @@ __pycache__/
 brain-tumor-mri-dataset.zip
 brain-tumors-dataset.zip
 .log
+.pytest_cache/

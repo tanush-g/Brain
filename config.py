@@ -23,8 +23,6 @@ def initialize_directories():
 # Data paths
 TRAIN_DATA_PATH = DATA_DIR / "Training"
 TEST_DATA_PATH = DATA_DIR / "Testing"
-LEGACY_DATA_PATH = BASE_DIR / "Data"  # For backward compatibility
-
 # Model paths
 MODEL_PATH = BASE_DIR / "model.keras"
 BEST_MODEL_PATH = MODELS_DIR / "best_model.keras"
@@ -127,31 +125,7 @@ STREAMLIT_CONFIG = {
     'layout': "wide",
     'initial_sidebar_state': "expanded",
     'max_file_size': 10,  # MB
-    'allowed_extensions': ["jpg", "jpeg", "png", "bmp", "tiff", "dcm"],
-    'theme': {
-        'primary_color': "#FF6B6B",
-        'background_color': "#FFFFFF",
-        'secondary_background_color': "#F0F2F6",
-        'text_color': "#262730"
-    },
-    'demo_images_path': BASE_DIR / "demo_images"
-}
-
-# UI styling and colors
-UI_STYLES = {
-    'main_header_color': "#FF6B6B",
-    'confidence_colors': {
-        'high': '#4CAF50',
-        'medium': '#FF9800', 
-        'low': '#f44336'
-    },
-    'chart_colors': ['#FAC500', '#0BFA00', '#0066FA', '#FA0000'],
-    'gradient_backgrounds': {
-        'primary': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        'success': 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)',
-        'warning': 'linear-gradient(135deg, #FF9800 0%, #F57C00 100%)',
-        'danger': 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)'
-    }
+    'allowed_extensions': ["jpg", "jpeg", "png", "bmp", "tiff", "dcm", "tif"],
 }
 
 # Visualization parameters
