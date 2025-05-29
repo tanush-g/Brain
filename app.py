@@ -226,6 +226,7 @@ def sidebar_info():
     with st.sidebar.expander("📋 Upload Guidelines", expanded=False):
         st.markdown("""
         **Supported formats:** JPG, PNG, BMP, TIFF
+        
         **Recommended:** 
         - Clear MRI brain scans
         - Good contrast and resolution
