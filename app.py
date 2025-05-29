@@ -13,7 +13,7 @@ import pandas as pd
 from PIL import Image
 import io
 import time
-import tensorflow as tf
+
 
 from model_utils import ModelUtils
 from config import (
@@ -26,7 +26,7 @@ st.set_page_config(
     page_title=STREAMLIT_CONFIG['page_title'],
     page_icon=STREAMLIT_CONFIG['page_icon'],
     layout=STREAMLIT_CONFIG['layout'],
-    initial_sidebar_state="expanded"
+    # initial_sidebar_state="expanded"
 )
 
 @st.cache_resource
@@ -301,7 +301,7 @@ def main():
     display_model_info()
     
     if not uploaded_file:
-        st.info("👆 Please upload an MRI image using the sidebar to start the analysis.")
+        st.info("👈 Please upload an MRI image using the sidebar to start the analysis.")
         
         add_demo_section()
         
@@ -466,7 +466,7 @@ def add_footer():
         """)
     
     st.markdown("---")
-    st.caption("🧠 Brain Tumor AI Classifier | Built with TensorFlow & Streamlit. For educational and research purposes only. Not for medical diagnosis.")
+    st.caption("🧠 Brain Tumor AI Classifier | Built with ❤️ & TensorFlow & Streamlit. For educational and research purposes only. Not for medical diagnosis.")
 
 if __name__ == "__main__":
     main()
