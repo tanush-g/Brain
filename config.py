@@ -23,8 +23,6 @@ def initialize_directories():
 # Data paths
 TRAIN_DATA_PATH = DATA_DIR / "Training"
 TEST_DATA_PATH = DATA_DIR / "Testing"
-# LEGACY_DATA_PATH = BASE_DIR / "Data"  # For backward compatibility
-
 # Model paths
 MODEL_PATH = BASE_DIR / "model.keras"
 BEST_MODEL_PATH = MODELS_DIR / "best_model.keras"
