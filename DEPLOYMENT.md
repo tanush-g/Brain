@@ -10,7 +10,7 @@ This document provides instructions for deploying the Brain Tumor Classification
 ## Deployment Steps
 
 1. **Fork or push your code to GitHub**
-   
+
    Make sure your code is available in a GitHub repository.
 
 2. **Install requirements**
